@@ -23,17 +23,18 @@ jobs:
 
       - name: Find and Compile C++ code from arrays folder
         run: |
-          # arrays papkasidagi barcha .cpp fayllarini topish
+          # arrays papkasidagi barcha .cpp fayllarini topish va ularni kompilyatsiya qilish
           cpp_files=$(find arrays -name "*.cpp")
           
-          # agar cpp_files bo'sh bo'lmasa, kompilyatsiya qilish
+          # Agar cpp_files bo'sh bo'lmasa, kompilyatsiya qilish
           if [ -n "$cpp_files" ]; then
+            echo "Compiling C++ files: $cpp_files"
             g++ -o output $cpp_files  # Barcha topilgan .cpp fayllarni kompilyatsiya qilish
           else
             echo "No C++ files found in arrays directory"
-            exit 1  # Xato qaytarish
+            exit 1  # Fayl topilmasa, workflow to'xtatiladi
           fi
-          
+
       - name: Run the program (if needed)
         run: |
           ./output  # Agar dastur ishlatilsa, uni ishga tushirishingiz mumkin
