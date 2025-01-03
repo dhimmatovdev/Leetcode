@@ -1,12 +1,12 @@
-name: C++ Compile and Test
+name: C++ Compile and Test for 561_array_partition.cpp
 
 on:
   push:
     paths:
-      - 'arrays/**/*.cpp'   # faqat arrays papkasidagi .cpp fayllarini push qilganda workflow ishga tushadi
+      - 'arrays/561_array_partition.cpp'   # faqat arrays papkasidagi 561_array_partition.cpp fayli push qilganda workflow ishga tushadi
   pull_request:
     paths:
-      - 'arrays/**/*.cpp'   # faqat arrays papkasidagi .cpp fayllari uchun pull request yuborilganida workflow ishga tushadi
+      - 'arrays/561_array_partition.cpp'   # faqat arrays papkasidagi 561_array_partition.cpp fayli uchun pull request yuborilganida workflow ishga tushadi
 
 jobs:
   build:
@@ -21,32 +21,23 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential  # Zarur bo'lgan C++ paketlarini o'rnatish
 
-      - name: Find and Compile C++ code from arrays folder
+      - name: Compile 561_array_partition.cpp
         run: |
-          # arrays papkasidagi barcha .cpp fayllarini topish va ularni kompilyatsiya qilish
-          cpp_files=$(find arrays -name "*.cpp")
+          # 561_array_partition.cpp faylini kompilyatsiya qilish
+          g++ arrays/561_array_partition.cpp -o output  # 561_array_partition.cpp faylini kompilyatsiya qilish
           
-          # Agar cpp_files bo'sh bo'lmasa, kompilyatsiya qilish
-          if [ -n "$cpp_files" ]; then
-            echo "Compiling C++ files: $cpp_files"
-            g++ -o output $cpp_files  # Barcha topilgan .cpp fayllarni kompilyatsiya qilish
-          else
-            echo "No C++ files found in arrays directory"
-            exit 1  # Fayl topilmasa, workflow to'xtatiladi
-          fi
-
       - name: Run the program (if needed)
         run: |
-          ./output  # Agar dastur ishlatilsa, uni ishga tushirishingiz mumkin
+          ./output  # Dastur muvaffaqiyatli kompilyatsiya qilinsa, uni ishga tushirish
 
       - name: Send Telegram Notification on Success
         if: success()  # Agar kompilyatsiya muvaffaqiyatli bo'lsa
         run: |
-          MESSAGE="C++ build and tests passed successfully!"
+          MESSAGE="C++ build and tests passed successfully for 561_array_partition.cpp!"
           bash ./send_telegram.sh "$MESSAGE"  # Telegramga xabar yuborish
 
       - name: Send Telegram Notification on Failure
         if: failure()  # Agar xatolik yuzaga kelsa
         run: |
-          MESSAGE="C++ build or tests failed. Please check the logs."
+          MESSAGE="C++ build or tests failed for 561_array_partition.cpp. Please check the logs."
           bash ./send_telegram.sh "$MESSAGE"  # Telegramga xabar yuborish
