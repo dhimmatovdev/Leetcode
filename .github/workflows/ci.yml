@@ -1,0 +1,44 @@
+name: C++ Compile and Test
+
+on:
+  push:
+    paths:
+      - '**/*.cpp'   # faqat .cpp fayllarini push qilganda workflow ishga tushadi
+  pull_request:
+    paths:
+      - '**/*.cpp'   # faqat .cpp fayllari uchun pull request yuborilganida workflow ishga tushadi
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Repository'ni tekshirib olish
+
+      - name: Set up C++ environment
+        uses: actions/setup-cpp@v1  # C++ muhiti o'rnatish
+
+      - name: Install dependencies
+        run: sudo apt-get install build-essential  # Zarur bo'lgan paketlarni o'rnatish
+
+      - name: Compile C++ code
+        run: |
+          # Barcha C++ fayllarini kompilyatsiya qilish
+          g++ -o output *.cpp
+          
+      - name: Run the program (if needed)
+        run: |
+          ./output  # Agar dastur ishlatilsa, uni ishga tushirishingiz mumkin
+
+      - name: Send Telegram Notification on Success
+        if: success()  # Agar kompilyatsiya muvaffaqiyatli bo'lsa
+        run: |
+          MESSAGE="C++ build and tests passed successfully!"
+          bash ./send_telegram.sh "$MESSAGE"  # Telegramga xabar yuborish
+
+      - name: Send Telegram Notification on Failure
+        if: failure()  # Agar xatolik yuzaga kelsa
+        run: |
+          MESSAGE="C++ build or tests failed. Please check the logs."
+          bash ./send_telegram.sh "$MESSAGE"  # Telegramga xabar yuborish
