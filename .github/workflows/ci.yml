@@ -3,10 +3,10 @@ name: C++ Compile and Test
 on:
   push:
     paths:
-      - '**/*.cpp'   # faqat .cpp fayllarini push qilganda workflow ishga tushadi
+      - 'arrays/**/*.cpp'   # faqat arrays papkasidagi .cpp fayllarini push qilganda workflow ishga tushadi
   pull_request:
     paths:
-      - '**/*.cpp'   # faqat .cpp fayllari uchun pull request yuborilganida workflow ishga tushadi
+      - 'arrays/**/*.cpp'   # faqat arrays papkasidagi .cpp fayllari uchun pull request yuborilganida workflow ishga tushadi
 
 jobs:
   build:
@@ -22,10 +22,10 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get install build-essential  # Zarur bo'lgan paketlarni o'rnatish
 
-      - name: Compile C++ code
+      - name: Compile C++ code from arrays folder
         run: |
-          # Barcha C++ fayllarini kompilyatsiya qilish
-          g++ -o output *.cpp
+          # faqat arrays papkasidagi C++ fayllarini kompilyatsiya qilish
+          g++ -o output arrays/**/*.cpp
           
       - name: Run the program (if needed)
         run: |
