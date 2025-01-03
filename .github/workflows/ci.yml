@@ -21,10 +21,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential  # Zarur bo'lgan C++ paketlarini o'rnatish
 
-      - name: Compile C++ code from arrays folder
+      - name: Find and Compile C++ code from arrays folder
         run: |
-          # faqat arrays papkasidagi C++ fayllarini kompilyatsiya qilish
-          g++ -o output arrays/**/*.cpp
+          # arrays papkasidagi barcha .cpp fayllarini topish va kompilyatsiya qilish
+          cpp_files=$(find arrays -name "*.cpp")
+          g++ -o output $cpp_files  # barcha topilgan .cpp fayllarini kompilyatsiya qilish
           
       - name: Run the program (if needed)
         run: |
@@ -37,7 +38,7 @@ jobs:
           bash ./send_telegram.sh "$MESSAGE"  # Telegramga xabar yuborish
 
       - name: Send Telegram Notification on Failure
-        if: failure()  # Agar xatolik yuzaga kelsa
+        if: failure()  
         run: |
           MESSAGE="C++ build or tests failed. Please check the logs."
           bash ./send_telegram.sh "$MESSAGE"  # Telegramga xabar yuborish
